@@ -63,6 +63,20 @@ class FeatureDAO extends DAO {
 	 * @param $seq int
 	 */
 	function insertFeature($monographId, $assocType, $assocId, $seq) {
+
+		//so that features don't end up having the same seq value, get max seq for given press context
+		$result = $this->retrieve(
+				'SELECT MAX(seq) FROM features
+				WHERE assoc_type = ? and assoc_id = ?',
+			array($assocType, $assocId));
+
+		if ($result->RecordCount() > 0){
+			$seq = (int) current($result->fields) + 1;
+
+		} else{
+			$seq = 0;
+		}
+
 		$this->update(
 			'INSERT INTO features
 				(submission_id, assoc_type, assoc_id, seq)
