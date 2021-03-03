@@ -133,7 +133,22 @@ class BackendSubmissionsHandler extends PKPBackendSubmissionsHandler {
 		$featureDao = \DAORegistry::getDAO('FeatureDAO');
 		$featureDao->deleteByMonographId($submissionId);
 		if (!empty($params['featured'])) {
+
+
+
 			foreach($params['featured'] as $feature) {
+				if ($feature['seq'] == -1) {
+					$result = $featureDao->retrieve(
+						'SELECT MAX(seq) FROM features
+						WHERE assoc_type = ? and assoc_id = ?',
+						array($feature['assoc_type'], $feature['assoc_id']));
+
+						if ($result->RecordCount() > 0) {
+							$feature['seq'] = (int) current($result->fields) + 1;
+						} else {
+							$feature['seq'] = 0;
+						}
+				}
 				$featureDao->insertFeature($submissionId, $feature['assoc_type'], $feature['assoc_id'], $feature['seq']);
 			}
 		}
