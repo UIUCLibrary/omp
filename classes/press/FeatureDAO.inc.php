@@ -150,6 +150,21 @@ class FeatureDAO extends DAO {
 		return $featured;
 	}
 
+	function getMaxSequencePosition($assoc_type, $assoc_id) {
+		$result = $this->retrieve(
+			'SELECT MAX(seq) FROM features
+				WHERE assoc_type = ? AND assoc_id = ?',
+			array((int) $assoc_type, (int) $assoc_id)
+		);
+
+		if ($result->RecordCount() > 0) {
+			$seq = (int) current($result->fields) +1;
+		} else {
+			$seq = 1;
+		}
+		return $seq;
+	}
+
 	/**
 	 * Get the current sequence position of the passed monograph id.
 	 * @param $monographId int The monograph id to check the sequence position.
