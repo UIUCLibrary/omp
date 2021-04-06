@@ -150,23 +150,19 @@ class FeatureDAO extends DAO {
 		return $featured;
 	}
 
-	/**
-	 * Return the largest index in the list of featured by press
-	 * @param $assoc_type
-	 * @param $assoc_id
-	 * @return int
-	 */
 	function getMaxSequencePosition($assoc_type, $assoc_id) {
 		$result = $this->retrieve(
-			'SELECT MAX(seq) as seq FROM features
-                                WHERE assoc_type = ? AND assoc_id = ?',
+			'SELECT MAX(seq) FROM features
+				WHERE assoc_type = ? AND assoc_id = ?',
 			array((int) $assoc_type, (int) $assoc_id)
 		);
-		$seq = 0;
-		foreach ($result as $row) {
-			$seq = (int) $row->seq;
+
+		if ($result->RecordCount() > 0) {
+			$seq = (int) current($result->fields) +1;
+		} else {
+			$seq = 1;
 		}
-		return $seq + 1 ;
+		return $seq;
 	}
 
 	/**
