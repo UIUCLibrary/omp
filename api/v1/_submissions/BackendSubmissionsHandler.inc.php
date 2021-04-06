@@ -146,7 +146,8 @@ class BackendSubmissionsHandler extends PKPBackendSubmissionsHandler {
 		$newReleaseDao->deleteByMonographId($submissionId);
 		if (!empty($params['newRelease'])) {
 			foreach($params['newRelease'] as $newRelease) {
-				$newReleaseDao->insertNewRelease($submissionId, $newRelease['assoc_type'], $newRelease['assoc_id']);
+				$seq = $newReleaseDao->getMaxSequencePosition($newRelease['assoc_type'], $newRelease['assoc_id']);
+				$newReleaseDao->insertNewRelease($submissionId, $newRelease['assoc_type'], $newRelease['assoc_id'], $seq);
 			}
 		}
 
