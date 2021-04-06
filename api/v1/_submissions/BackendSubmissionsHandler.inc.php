@@ -137,8 +137,10 @@ class BackendSubmissionsHandler extends PKPBackendSubmissionsHandler {
 
 
 			foreach($params['featured'] as $feature) {
-				$seq = $featureDao->getMaxSequencePosition($feature['assoc_type'], $feature['assoc_id']);
-				$featureDao->insertFeature($submissionId, $feature['assoc_type'], $feature['assoc_id'], $seq);
+				if ($feature['seq'] === -1){
+					$feature['seq'] = $featureDao->getMaxSequencePosition($feature['assoc_type'], $feature['assoc_id']);
+				}
+				$featureDao->insertFeature($submissionId, $feature['assoc_type'], $feature['assoc_id'], $feature['seq']);
 			}
 		}
 
