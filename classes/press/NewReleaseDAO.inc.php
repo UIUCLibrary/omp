@@ -80,14 +80,13 @@ class NewReleaseDAO extends DAO {
 	function insertNewRelease($monographId, $assocType, $assocId, $seq) {
 		$this->update(
 			'INSERT INTO new_releases
-				(submission_id, assoc_type, assoc_id, seq)
+				(submission_id, assoc_type, assoc_id)
 				VALUES
-				(?, ?, ?, ?)',
+				(?, ?, ?)',
 			[
 				(int) $monographId,
 				(int) $assocType,
 				(int) $assocId,
-				(int) $seq
 			]
 		);
 	}
@@ -176,24 +175,6 @@ class NewReleaseDAO extends DAO {
 		return $newRelease;
 	}
 
-	/**
-	 * Return the largest index in the list of new releases by press
-	 * @param $assoc_type
-	 * @param $assoc_id
-	 * @return int
-	 */
-	function getMaxSequencePosition($assoc_type, $assoc_id) {
-		$result = $this->retrieve(
-			'SELECT MAX(seq) as seq FROM new_releases
-                                WHERE assoc_type = ? AND assoc_id = ?',
-			array((int) $assoc_type, (int) $assoc_id)
-		);
-		$seq = 0;
-		foreach ($result as $row) {
-			$seq = (int) $row->seq;
-		}
-		return $seq + 1 ;
-	}
 }
 
 
