@@ -75,17 +75,19 @@ class NewReleaseDAO extends DAO {
 	 * @param $monographId int
 	 * @param $assocType int ASSOC_TYPE_...
 	 * @param $assocId int
+	 * @param $seq int
 	 */
-	function insertNewRelease($monographId, $assocType, $assocId) {
+	function insertNewRelease($monographId, $assocType, $assocId, $seq) {
 		$this->update(
 			'INSERT INTO new_releases
-				(submission_id, assoc_type, assoc_id)
+				(submission_id, assoc_type, assoc_id, seq)
 				VALUES
-				(?, ?, ?)',
+				(?, ?, ?, ?)',
 			[
 				(int) $monographId,
 				(int) $assocType,
-				(int) $assocId
+				(int) $assocId,
+				(int) $seq
 			]
 		);
 	}
